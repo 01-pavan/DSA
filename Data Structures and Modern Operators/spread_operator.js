@@ -1,3 +1,19 @@
+'use strict';
+openingHours = {
+  thu: {
+    open: 12,
+    close: 22,
+  },
+  fri: {
+    open: 11,
+    close: 23,
+  },
+  sat: {
+    open: 0,
+    close: 24,
+  },
+};
+
 const restaurant = {
   name: 'Classico Italiano',
   location: 'Via Angelo Tavanti 23, Firenze, Italy',
@@ -7,31 +23,28 @@ const restaurant = {
   order: function (starterIndex, mainIndex) {
     return [this.starterMenu[starterIndex], this.mainMenu[mainIndex]];
   },
-  openingHours: {
-    thu: {
-      open: 12,
-      close: 22,
-    },
-    fri: {
-      open: 11,
-      close: 23,
-    },
-    sat: {
-      open: 0,
-      close: 24,
-    },
-  },
+
   orderDelivery: function ({ starterIndex = 1, mainIndex = 2, time, address }) {
     //we used destructuring here converting objects into variables
     console.log(
       `Order received ! ${this.starterMenu[starterIndex]} and ${this.mainMenu[mainIndex]} will be delivered to ${address} at ${time}`
     );
   },
-  orderPasta: function (...ing) {
+  //   orderPasta: function (...ing) {
+  //     console.log(
+  //       `here is your delicious pasta with ${ing[0]}, ${ing[1]}, and ${ing[2]}`
+  //     );
+  //   },
+  //ES6 enhanced function syntax
+  orderPasta(...ing) {
     console.log(
       `here is your delicious pasta with ${ing[0]}, ${ing[1]}, and ${ing[2]}`
     );
   },
+
+  //   openingHours: openingHours, //before ES6
+  //ES6 enhanced object literals
+  openingHours,
 };
 
 const arr = [7, 8, 9];
@@ -71,7 +84,7 @@ console.log(...letters);
 // ];
 //console.log(orderPasta(...ing));
 
-//rest operator ==>> The rest parameter syntax allows us to represent an indefinite number of arguments as an array.
+//rest parameter ==>> The rest parameter syntax allows us to represent an indefinite number of arguments as an array.
 //With the help of a rest parameter a function can be called with any number of arguments, no matter how it was defined. Rest parameter is added in ES2015 or ES6 which improved the ability to handle parameter.
 const [a, b, c, ...others] = [1, 2, 3, 4, 5];
 console.log(others);
@@ -157,3 +170,18 @@ rest1.owner &&= '<ANONYMOUS>';
 rest2.owner &&= '<ANONYMOUS';
 console.log(rest1);
 console.log(rest2);
+
+//for -of loop
+console.log('<<<<<-----for-of-loop--------->>>>>>');
+const menu = [...restaurant.starterMenu, ...restaurant.mainMenu]; //here we used spread operator
+
+for (const items of menu) console.log(items);
+
+for (const items of menu.entries()) {
+  //by using entries method we will get index number of elements
+  console.log(items);
+}
+for (const [i, el] of menu.entries()) {
+  //here we used destructuring of arrays
+  console.log(`${i + 1}.${el}`);
+}
