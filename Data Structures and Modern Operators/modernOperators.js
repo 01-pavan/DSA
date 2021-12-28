@@ -238,3 +238,97 @@ for (const [key, { open, close }] of entries) {
   //<< here we used array destructuring and object destructuring (value is also a object then we destructured into two variables open & close)
   console.log(`On ${key} we open at ${open} and close at ${close}`);
 }
+
+//sets
+console.log('<<<<----SETS------->>>>');
+const orderSet = new Set([
+  'pasta',
+  'pizza',
+  'pizza',
+  'risotto',
+  'pasta',
+  'pizza',
+]);
+console.log(orderSet); // returns only unique values
+console.log(new Set('jonas'));
+console.log(orderSet.size);
+console.log(orderSet.has('pizza')); //checks the element in set if exist  returns true
+console.log(orderSet.has('bread')); //op: false
+orderSet.add('garlic bread'); // adds element
+orderSet.delete('pasta'); //removes element
+// orderSet.clear(); deletes the all elements from the set
+console.log(orderSet);
+
+for (const order of orderSet) {
+  console.log(order);
+}
+//example
+const staff = ['waiter', 'chef', 'waiter', 'manager', 'chef', 'waiter'];
+const staffUniqe = [...new Set(staff)]; //converting set into array
+console.log(staffUniqe);
+
+//MAPS
+console.log('<<<<-----MAPS----->>>>');
+
+const rest = new Map();
+rest.set('name', 'Classico Italino');
+rest.set(1, 'Firenze,italy');
+console.log(rest);
+
+rest
+  .set('categories', ['italian', 'pizzeria', 'vegetarian', 'organic'])
+  .set('open', 11)
+  .set('close', 23)
+  .set(true, 'we are opened')
+  .set(false, 'we are closed');
+console.log(rest);
+const time = 21;
+
+if (time > rest.get('open') && time < rest.get('close')) {
+  //get method is used to retreive the data
+  console.log(rest.get(true));
+}
+
+console.log(rest.has('categories'));
+rest.delete(2);
+console.log(rest);
+//example
+const ary = [1, 2];
+rest.set(ary, 'test');
+rest.set(document.querySelector('h1'), 'heading'); //we can also use in Dom
+console.log(rest);
+console.log(rest.get(ary));
+
+const question = new Map([
+  ['question', 'what is the best programming language in the world ?'],
+  [1, 'C'],
+  [2, 'Java'],
+  [3, 'JavaScript'],
+  ['correct', 3],
+  [true, 'correct🎉'],
+  [false, 'Try again😒'],
+]);
+console.log(question);
+
+//converting object to map
+console.log(Object.entries(openingHours));
+const hoursMap = new Map(Object.entries(openingHours));
+console.log(hoursMap);
+//quiz app
+console.log(question.get('question'));
+for (const [key, value] of question) {
+  if (typeof key === 'number') console.log(`Answer ${key}: ${value}`);
+}
+const answer = 3;
+// const answer = Number(prompt('your answer')); //prompt returns the string then we need to convert into Number to compare with answer
+console.log(answer);
+// console.log(typeof answer);
+// if (answer === question.get('correct')) {
+//   console.log(question.get(true));
+// } else console.log(question.get(false));
+
+console.log(question.get(question.get('correct') === answer)); //optimized solution on if else (above code)
+
+//converting map to array
+
+console.log([...question]);
