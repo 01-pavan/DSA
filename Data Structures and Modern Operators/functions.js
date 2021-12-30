@@ -243,3 +243,18 @@ runOnce();
 })();
 
 (() => console.log('this function invoked without function call'))();
+
+//closures ****************
+console.log('<<<<<<<<<<<<<<<----closures---->>>>>>>>>>>>');
+
+const secureBooking = function () {
+  let passengerCount = 0;
+  return function () {
+    passengerCount++;
+    console.log(`${passengerCount} passengers`);
+  };
+};
+const booker = secureBooking();
+booker();
+booker();
+booker();
