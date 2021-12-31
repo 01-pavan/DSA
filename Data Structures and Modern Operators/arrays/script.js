@@ -72,7 +72,62 @@ const displayMovements = function (movements) {
     containerMovements.insertAdjacentHTML('afterbegin', html); //created the html string and inserted using  insertAdjacentHTML method . The insertAdjacentHTML() method of the Element interface parses the specified text as HTML or XML and inserts the resulting nodes into the DOM tree at a specified position. syntax::element.insertAdjacentHTML(position, text);
   });
 };
-displayMovements(account1.movements);
+displayMovements(account2.movements);
+const calcPrintBalance = function (accs) {
+  accs.forEach(function (accs) {
+    accs.totalBalance = accs.movements.reduce((acc, cur) => acc + cur, 0);
+  });
+  labelBalance.textContent = `${account1.totalBalance}₹`;
+};
+calcPrintBalance(accounts);
+const createUserName = function (accs) {
+  //using this function we added the username property  to each account object 🎉🎉🎉🎉 .//it doesnt return any value
+  console.log(accs);
+  accs.forEach(function (accs) {
+    accs.username = accs.owner
+      .toLowerCase()
+      .split(' ')
+      .map(name => name[0])
+      .join('');
+  });
+};
+createUserName(accounts);
+
+//computing usernames
+// const user = 'Steven Thomas Williams'; //stw
+
+// const userName = user.toLowerCase().split(' ');
+// let str = '';
+// for (const [i, value] of userName.entries()) {
+//   str += value.slice(0, 1);
+// }
+// console.log(str);
+
+// computing username using foreach method
+const user = account4.owner;
+const userName = function (user) {
+  const userLower = user.toLowerCase().split(' ');
+  let str = '';
+  userLower.forEach(value => {
+    str += value.slice(0, 1);
+  });
+  return str;
+};
+console.log(userName(user));
+
+//using map method  //immportant functionality
+// const createUserName = function (accs) {
+//   //using this function we added the username property  to each account object 🎉🎉🎉🎉 .//it doesnt return any value
+//   console.log(accs);
+//   accs.forEach(function (accs) {
+//     accs.username = accs.owner
+//       .toLowerCase()
+//       .split(' ')
+//       .map(name => name[0])
+//       .join('');
+//   });
+// };
+// console.log(createUserName(accounts));
 
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
@@ -199,6 +254,37 @@ const movementDescriptions = movements.map((mov, i) => {
 });
 console.log(movementDescriptions);
 
+//filter() method
+
+// The filter() method creates a new array filled with elements that pass a test provided by a function.
+// The filter() method does not execute the function for empty elements.
+// The filter() method does not change the original array.
+
+const deposits = movements.filter(function (mov) {
+  return mov > 0;
+});
+console.log(deposits);
+
+const withdrawals = movements.filter(mov => mov < 0);
+console.log(withdrawals);
+
+//reduce method()
+
+//accummulator is like snow ball
+
+console.log(movements);
+const balance = movements.reduce(function (acc, cur, i, arr) {
+  // acc = The initialValue, or the previously returned value of the function. //cur = current value
+  console.log(`Iteration ${i}: ${acc}`);
+  return acc + cur;
+}, 0); //here 0 is the initial value to start with
+console.log(balance);
+const max = movements.reduce(function (acc, cur) {
+  if (acc > cur) return acc;
+  else return cur;
+}, movements[0]);
+console.log(`max value is ${max}`);
+
 // Coding Challenge #1
 
 /* 
@@ -235,3 +321,44 @@ const checkDogs = function (dogsJulia, dogsKate) {
 const juliadata = [3, 5, 2, 12, 7];
 const kateData = [4, 1, 15, 8, 3];
 checkDogs(juliadata, kateData);
+
+//CODING CALLENGE 2
+///////////////////////////////////////
+// Coding Challenge #2
+
+/* 
+Let's go back to Julia and Kate's study about dogs. This time, they want to convert dog ages to human ages and calculate the average age of the dogs in their study.
+
+Create a function 'calcAverageHumanAge', which accepts an arrays of dog's ages ('ages'), and does the following things in order:
+
+1. Calculate the dog age in human years using the following formula: if the dog is <= 2 years old, humanAge = 2 * dogAge. If the dog is > 2 years old, humanAge = 16 + dogAge * 4.
+2. Exclude all dogs that are less than 18 human years old (which is the same as keeping dogs that are at least 18 years old)
+3. Calculate the average human age of all adult dogs (you should already know from other challenges how we calculate averages 😉)
+4. Run the function for both test datasets
+
+TEST DATA 1: [5, 2, 4, 1, 15, 8, 3]
+TEST DATA 2: [16, 6, 10, 5, 6, 1, 4]
+
+GOOD LUCK 😀
+*/
+
+console.log('<<<<<---CODING CHALLENGE 2---->>>>>');
+const calcAverageHumanAge = function (ages) {
+  const humanYears = ages
+    .map(function (age) {
+      if (age <= 2) {
+        age *= 2;
+      } else {
+        age = 16 + age * 4;
+      }
+      return age;
+    })
+    .filter(function (age) {
+      return age >= 18;
+    })
+    .reduce(function (acc, cur, _, arr) {
+      return acc + cur / arr.length;
+    }, 0);
+  console.log(humanYears);
+};
+calcAverageHumanAge([5, 2, 4, 1, 15, 8, 3]);
