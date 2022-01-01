@@ -86,21 +86,21 @@ const calcPrintBalance = function (movements) {
   labelBalance.textContent = `${movements.reduce((acc, cur) => acc + cur, 0)}₹`;
 };
 
-const calcDisplaySummary = function (movements) {
-  const incomes = movements
+const calcDisplaySummary = function (acc) {
+  const incomes = acc.movements
     .filter(mov => mov > 0)
     .reduce((acc, cur) => {
       return acc + cur;
     }, 0);
-  const outGo = movements
+  const outGo = acc.movements
     .filter(mov => mov < 0)
     .reduce((acc, cur) => acc + cur, 0);
   labelSumIn.textContent = `${incomes}₹`;
   labelSumOut.textContent = `${Math.abs(outGo)}₹`;
 
-  const interest = movements
+  const interest = acc.movements
     .filter(mov => mov > 0)
-    .map(mov => (mov * 1.2) / 100)
+    .map(mov => (mov * acc.interestRate) / 100)
     .filter(mov => mov >= 1)
     .reduce((acc, cur) => acc + cur, 0);
   console.log(interest);
@@ -123,7 +123,8 @@ createUserName(accounts);
 let currentAccount;
 btnLogin.addEventListener('click', function (e) {
   e.preventDefault(); //prevent form from submitting  //because button is present in html form ,so page is reloaded when we click that button
-
+  var utc = new Date().toJSON().slice(0, 10).replace(/-/g, '/');
+  labelDate.innerHTML = utc;
   currentAccount = accounts.find(
     acc => acc.username === inputLoginUsername.value
   );
@@ -132,12 +133,24 @@ btnLogin.addEventListener('click', function (e) {
     currentAccount.username === inputLoginUsername.value &&
     currentAccount.pin === Number(inputLoginPin.value)
   ) {
+    //display UI and message
+    clearDetails();
+    labelWelcome.innerHTML = `Welcome ${currentAccount.owner.split(' ')[0]}`;
     containerApp.style.opacity = '100';
-    calcDisplaySummary(currentAccount.movements);
+    //display movements
     displayMovements(currentAccount.movements);
+    //display summary
+    calcDisplaySummary(currentAccount);
+    //display total balance
     calcPrintBalance(currentAccount.movements);
+  } else {
+    clearDetails();
+    labelWelcome.innerHTML = 'invalid credentials❌';
   }
 });
+const clearDetails = () => {
+  inputLoginUsername.value = inputLoginPin.value = '';
+};
 
 //computing usernames
 // const user = 'Steven Thomas Williams'; //stw
