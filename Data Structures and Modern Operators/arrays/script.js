@@ -35,8 +35,14 @@ const account4 = {
   interestRate: 1,
   pin: 4444,
 };
+const account5 = {
+  owner: 'Pavan Kumar',
+  movements: [300, 1000, 700, 50, 90, -100, 1000, -500, 2000, 3500, -700],
+  interestRate: 1,
+  pin: 5555,
+};
 
-const accounts = [account1, account2, account3, account4];
+const accounts = [account1, account2, account3, account4, account5];
 
 // Elements
 const labelWelcome = document.querySelector('.welcome');
@@ -75,15 +81,11 @@ const displayMovements = function (movements) {
     containerMovements.insertAdjacentHTML('afterbegin', html); //created the html string and inserted using  insertAdjacentHTML method . The insertAdjacentHTML() method of the Element interface parses the specified text as HTML or XML and inserts the resulting nodes into the DOM tree at a specified position. syntax::element.insertAdjacentHTML(position, text);
   });
 };
-displayMovements(account1.movements);
-const calcPrintBalance = function (accs) {
-  accs.forEach(function (accs) {
-    accs.totalBalance = accs.movements.reduce((acc, cur) => acc + cur, 0);
-  });
-  labelBalance.textContent = `${account1.totalBalance}₹`;
+
+const calcPrintBalance = function (movements) {
+  labelBalance.textContent = `${movements.reduce((acc, cur) => acc + cur, 0)}₹`;
 };
-calcPrintBalance(accounts);
-console.log('incomes');
+
 const calcDisplaySummary = function (movements) {
   const incomes = movements
     .filter(mov => mov > 0)
@@ -102,9 +104,9 @@ const calcDisplaySummary = function (movements) {
     .filter(mov => mov >= 1)
     .reduce((acc, cur) => acc + cur, 0);
   console.log(interest);
-  labelSumInterest.textContent = `${interest}₹`;
+  labelSumInterest.textContent = `${Math.trunc(interest)}₹`;
 };
-calcDisplaySummary(account1.movements);
+
 const createUserName = function (accs) {
   //using this function we added the username property  to each account object 🎉🎉🎉🎉 .//it doesnt return any value
   console.log(accs);
@@ -117,6 +119,25 @@ const createUserName = function (accs) {
   });
 };
 createUserName(accounts);
+//login button event handler
+let currentAccount;
+btnLogin.addEventListener('click', function (e) {
+  e.preventDefault(); //prevent form from submitting  //because button is present in html form ,so page is reloaded when we click that button
+
+  currentAccount = accounts.find(
+    acc => acc.username === inputLoginUsername.value
+  );
+
+  if (
+    currentAccount.username === inputLoginUsername.value &&
+    currentAccount.pin === Number(inputLoginPin.value)
+  ) {
+    containerApp.style.opacity = '100';
+    calcDisplaySummary(currentAccount.movements);
+    displayMovements(currentAccount.movements);
+    calcPrintBalance(currentAccount.movements);
+  }
+});
 
 //computing usernames
 // const user = 'Steven Thomas Williams'; //stw
