@@ -7,7 +7,10 @@
 // Data
 const account1 = {
   owner: 'Jonas Schmedtmann',
-  movements: [200, 450, -400, 3000, -650, -130, 70, 1300, -102, 200],
+  movements: [
+    200, 450, -400, 3000, -650, -130, 70, 1300, -102, 200, -100, 80, -100,
+    -1000, 200, 300,
+  ],
   interestRate: 1.2, // %
   pin: 1111,
 };
@@ -72,7 +75,7 @@ const displayMovements = function (movements) {
     containerMovements.insertAdjacentHTML('afterbegin', html); //created the html string and inserted using  insertAdjacentHTML method . The insertAdjacentHTML() method of the Element interface parses the specified text as HTML or XML and inserts the resulting nodes into the DOM tree at a specified position. syntax::element.insertAdjacentHTML(position, text);
   });
 };
-displayMovements(account2.movements);
+displayMovements(account1.movements);
 const calcPrintBalance = function (accs) {
   accs.forEach(function (accs) {
     accs.totalBalance = accs.movements.reduce((acc, cur) => acc + cur, 0);
@@ -80,6 +83,28 @@ const calcPrintBalance = function (accs) {
   labelBalance.textContent = `${account1.totalBalance}₹`;
 };
 calcPrintBalance(accounts);
+console.log('incomes');
+const calcDisplaySummary = function (movements) {
+  const incomes = movements
+    .filter(mov => mov > 0)
+    .reduce((acc, cur) => {
+      return acc + cur;
+    }, 0);
+  const outGo = movements
+    .filter(mov => mov < 0)
+    .reduce((acc, cur) => acc + cur, 0);
+  labelSumIn.textContent = `${incomes}₹`;
+  labelSumOut.textContent = `${Math.abs(outGo)}₹`;
+
+  const interest = movements
+    .filter(mov => mov > 0)
+    .map(mov => (mov * 1.2) / 100)
+    .filter(mov => mov >= 1)
+    .reduce((acc, cur) => acc + cur, 0);
+  console.log(interest);
+  labelSumInterest.textContent = `${interest}₹`;
+};
+calcDisplaySummary(account1.movements);
 const createUserName = function (accs) {
   //using this function we added the username property  to each account object 🎉🎉🎉🎉 .//it doesnt return any value
   console.log(accs);
@@ -285,6 +310,27 @@ const max = movements.reduce(function (acc, cur) {
 }, movements[0]);
 console.log(`max value is ${max}`);
 
+const euroToUsd = 1.1;
+
+//chaining of methods :: pipeline
+const totalDepositsUSD = movements
+  .filter(mov => mov > 0)
+  .map(mov => mov * euroToUsd)
+  .reduce((acc, mov) => acc + mov, 0);
+console.log(totalDepositsUSD);
+
+console.log('<<<---find()--->>>');
+//FIND METHOD find()
+//✅The find() method returns the value of the first element that passes a test.
+//✅The find() method retuns undefined if no elements are found.
+
+const firstWithdrawal = movements.find(mov => mov < 0);
+console.log(movements);
+console.log(firstWithdrawal);
+
+const findAccount = accounts.find(acc => acc.owner === 'Jessica Davis');
+console.log(findAccount);
+
 // Coding Challenge #1
 
 /* 
@@ -343,22 +389,32 @@ GOOD LUCK 😀
 */
 
 console.log('<<<<<---CODING CHALLENGE 2---->>>>>');
-const calcAverageHumanAge = function (ages) {
-  const humanYears = ages
-    .map(function (age) {
-      if (age <= 2) {
-        age *= 2;
-      } else {
-        age = 16 + age * 4;
-      }
-      return age;
-    })
-    .filter(function (age) {
-      return age >= 18;
-    })
-    .reduce(function (acc, cur, _, arr) {
-      return acc + cur / arr.length;
-    }, 0);
-  console.log(humanYears);
+// const calcAverageHumanAge = function (ages) {
+//   const humanYears = ages
+//     .map(function (age) {
+//       if (age <= 2) {
+//         age *= 2;
+//       } else {
+//         age = 16 + age * 4;
+//       }
+//       return age;
+//     })
+//     .filter(function (age) {
+//       return age >= 18;
+//     })
+//     .reduce(function (acc, cur, _, arr) {
+//       return acc + cur / arr.length;
+//     }, 0);
+//   console.log(humanYears);
+// };
+// calcAverageHumanAge([5, 2, 4, 1, 15, 8, 3]);
+
+const calcAverageHumanAge = ages => {
+  //SAME AS ABOVE BUT USING ARROW FUNCTIONS
+  const avgHumanAge = ages
+    .map(age => (age <= 2 ? (age *= 2) : (age = 16 + age * 4)))
+    .filter(age => age >= 18)
+    .reduce((acc, cur, _, arr) => acc + cur / arr.length, 0);
+  console.log('AVG AGE = ' + avgHumanAge);
 };
 calcAverageHumanAge([5, 2, 4, 1, 15, 8, 3]);
