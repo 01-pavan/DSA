@@ -155,6 +155,7 @@ btnLogin.addEventListener('click', function (e) {
 const clearDetails = () => {
   inputLoginUsername.value = inputLoginPin.value = '';
   inputTransferTo.value = inputTransferAmount.value = '';
+  inputLoanAmount.value = '';
 };
 //transfer amount
 btnTransfer.addEventListener('click', function (e) {
@@ -186,6 +187,7 @@ btnLoan.addEventListener('click', function (e) {
   ) {
     currentAccount.movements.push(loanAmount);
     updateUI(currentAccount);
+    clearDetails();
   }
 });
 
@@ -456,6 +458,28 @@ const overalBalance2 = accounts //same as above but using flatmap() method
   .flatMap(acc => acc.movements)
   .reduce((acc, cur) => acc + cur);
 console.log(overalBalance2);
+
+//sort()
+//strings
+const owners = ['Jonas', 'Zach', 'Adam', 'Martha'];
+console.log(owners.sort()); //sort() methods mutates the original array// it sorts accordinngs to strings
+//numbers
+console.log(movements);
+console.log(movements.sort()); //op: [-130, -400, -650, 1300, 200, 3000, 450, 70] it is not sorted correctly because sort() method sees the numbers as strings
+
+//return < 0 : A,B (keep order)
+//return >0 : B,A   (switch order)
+//ascending
+// movements.sort((a, b) => {
+//   if (a > b) return 1;
+//   if (b > a) return -1;
+// });
+movements.sort((a, b) => a - b); //if a=10,b=20 a-b =>10-20=-10 returns -10 it is -10<0 then keep order //if a=20 b=10 >> a-b ==>> 20-10 =10 then  10 >0 then switch the order
+
+//desc
+movements.sort((a, b) => b - a);
+console.log(movements); //op: [-650, -400, -130, 70, 200, 450, 1300, 3000]
+
 // Coding Challenge #1
 
 /* 
