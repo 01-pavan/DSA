@@ -162,7 +162,7 @@ btnTransfer.addEventListener('click', function (e) {
   const toUser = inputTransferTo.value;
   const amount = Number(inputTransferAmount.value);
   const toAccount = accounts.find(acc => acc.username === toUser);
-  if (amount > 0 && amount <= currentAccount.balance) {
+  if (amount > 0 && amount != '' && amount <= currentAccount.balance) {
     toAccount.movements.push(amount);
     currentAccount.movements.push(-amount);
     updateUI(currentAccount);
@@ -170,11 +170,25 @@ btnTransfer.addEventListener('click', function (e) {
     if ((labelWelcome.innerHTML = 'insufficient amount❌')) {
       labelWelcome.innerHTML = `Welcome ${currentAccount.owner.split(' ')[0]}`;
     }
-  } else {
-    labelWelcome.innerHTML = 'insufficient amount❌';
+  } else if (amount == '') {
+    labelWelcome.innerHTML = 'plz enter amount to transfer';
   }
   clearDetails();
 });
+//request loan
+//bank gives the loan if atleast one deposit is 10% of requested loan amount
+btnLoan.addEventListener('click', function (e) {
+  e.preventDefault();
+  const loanAmount = Number(inputLoanAmount.value);
+  if (
+    loanAmount > 0 &&
+    currentAccount.movements.some(mov => mov >= loanAmount * 0.1)
+  ) {
+    currentAccount.movements.push(loanAmount);
+    updateUI(currentAccount);
+  }
+});
+
 //close account button event handling
 btnClose.addEventListener('click', function (e) {
   e.preventDefault();
@@ -183,6 +197,8 @@ btnClose.addEventListener('click', function (e) {
     currentAccount.pin === Number(inputClosePin.value)
   ) {
     const index = accounts.findIndex(
+      //The findIndex() method returns the index of the first element in the array that satisfies the provided testing function. Otherwise, it returns -1, indicating that no element passed the test.
+
       acc => acc.username === currentAccount.username
     );
     console.log(index);
@@ -408,7 +424,38 @@ console.log(firstWithdrawal);
 
 const findAccount = accounts.find(acc => acc.owner === 'Jessica Davis');
 console.log(findAccount);
+//some() method
+// The some() method tests whether at least one element in the array passes the test implemented by the provided function. It returns true if, in the array, it finds an element for which the provided function returns true; otherwise it returns false. It doesn't modify the array.
 
+const anyDeposits = movements.some(mov => mov > 0);
+console.log(movements.some(mov => mov > 1500)); //op: true >> because some movement are greater than 1500
+console.log('some method = ' + anyDeposits);
+
+//every() method
+//The every() method tests whether all elements in the array pass the test implemented by the provided function. It returns a Boolean value.
+console.log('every ' + movements.every(mov => mov > 0));
+
+//separate callback
+const deposit = mov => mov > 0;
+console.log(movements.some(deposit)); //separate callback function
+console.log(movements.every(deposit));
+
+//flat()
+//The flat() method creates a new array with all sub-array elements concatenated into it recursively up to the specified depth.
+const arr = [[1, 2, 3], [4, 5, 6], 7, 8];
+console.log(arr.flat());
+const arrDeep = [[[1, 2], 3], [4, 5, 6], 7, 8];
+console.log(arrDeep.flat(2)); //WE NEED TO SPECIFY DEPTH //default is 1
+const overalBalance = accounts
+  .map(acc => acc.movements)
+  .flat()
+  .reduce((acc, cur) => acc + cur);
+console.log(overalBalance);
+//flatmap()
+const overalBalance2 = accounts //same as above but using flatmap() method
+  .flatMap(acc => acc.movements)
+  .reduce((acc, cur) => acc + cur);
+console.log(overalBalance2);
 // Coding Challenge #1
 
 /* 
