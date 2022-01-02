@@ -82,8 +82,9 @@ const displayMovements = function (movements) {
   });
 };
 
-const calcPrintBalance = function (movements) {
-  labelBalance.textContent = `${movements.reduce((acc, cur) => acc + cur, 0)}₹`;
+const calcPrintBalance = function (acc) {
+  acc.balance = acc.movements.reduce((acc, cur) => acc + cur, 0);
+  labelBalance.textContent = `${acc.balance}₹`;
 };
 
 const calcDisplaySummary = function (acc) {
@@ -119,6 +120,14 @@ const createUserName = function (accs) {
   });
 };
 createUserName(accounts);
+const updateUI = function (acc) {
+  //display movements
+  displayMovements(currentAccount.movements);
+  //display summary
+  calcDisplaySummary(currentAccount);
+  //display total balance
+  calcPrintBalance(currentAccount);
+};
 //login button event handler
 let currentAccount;
 btnLogin.addEventListener('click', function (e) {
@@ -134,15 +143,10 @@ btnLogin.addEventListener('click', function (e) {
     currentAccount.pin === Number(inputLoginPin.value)
   ) {
     //display UI and message
+    updateUI(currentAccount);
     clearDetails();
     labelWelcome.innerHTML = `Welcome ${currentAccount.owner.split(' ')[0]}`;
     containerApp.style.opacity = '100';
-    //display movements
-    displayMovements(currentAccount.movements);
-    //display summary
-    calcDisplaySummary(currentAccount);
-    //display total balance
-    calcPrintBalance(currentAccount.movements);
   } else {
     clearDetails();
     labelWelcome.innerHTML = 'invalid credentials❌';
@@ -150,7 +154,47 @@ btnLogin.addEventListener('click', function (e) {
 });
 const clearDetails = () => {
   inputLoginUsername.value = inputLoginPin.value = '';
+  inputTransferTo.value = inputTransferAmount.value = '';
 };
+//transfer amount
+btnTransfer.addEventListener('click', function (e) {
+  e.preventDefault();
+  const toUser = inputTransferTo.value;
+  const amount = Number(inputTransferAmount.value);
+  const toAccount = accounts.find(acc => acc.username === toUser);
+  if (amount > 0 && amount <= currentAccount.balance) {
+    toAccount.movements.push(amount);
+    currentAccount.movements.push(-amount);
+    updateUI(currentAccount);
+
+    if ((labelWelcome.innerHTML = 'insufficient amount❌')) {
+      labelWelcome.innerHTML = `Welcome ${currentAccount.owner.split(' ')[0]}`;
+    }
+  } else {
+    labelWelcome.innerHTML = 'insufficient amount❌';
+  }
+  clearDetails();
+});
+//close account button event handling
+btnClose.addEventListener('click', function (e) {
+  e.preventDefault();
+  if (
+    currentAccount.username === inputCloseUsername.value &&
+    currentAccount.pin === Number(inputClosePin.value)
+  ) {
+    const index = accounts.findIndex(
+      acc => acc.username === currentAccount.username
+    );
+    console.log(index);
+    accounts.splice(index, 1);
+    console.log(accounts);
+    containerApp.style.opacity = '0';
+    labelWelcome.innerHTML = 'Login';
+    clearDetails();
+  } else {
+    console.log('invalid credentials');
+  }
+});
 
 //computing usernames
 // const user = 'Steven Thomas Williams'; //stw
