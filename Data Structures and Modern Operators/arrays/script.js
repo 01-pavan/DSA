@@ -666,3 +666,9 @@ const pizzaTimer = setTimeout(
 console.log('waiting');
 
 if (ingredients.includes('spinach')) clearTimeout(pizzaTimer); //Use the clearTimeout() method to prevent the function from starting.
+
+//setInterval
+// setInterval(() => {
+//   const now = new Date();
+//   console.log(now);
+// }, 1000);
