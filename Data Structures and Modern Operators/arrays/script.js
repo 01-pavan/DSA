@@ -185,8 +185,11 @@ btnLoan.addEventListener('click', function (e) {
     loanAmount > 0 &&
     currentAccount.movements.some(mov => mov >= loanAmount * 0.1)
   ) {
-    currentAccount.movements.push(loanAmount);
-    updateUI(currentAccount);
+    setTimeout(function () {
+      //set time implemented
+      currentAccount.movements.push(loanAmount);
+      updateUI(currentAccount);
+    }, 3000);
     clearDetails();
   }
 });
@@ -196,7 +199,7 @@ btnClose.addEventListener('click', function (e) {
   e.preventDefault();
   if (
     currentAccount.username === inputCloseUsername.value &&
-    currentAccount.pin === Number(inputClosePin.value)
+    currentAccount.pin === +inputClosePin.value
   ) {
     const index = accounts.findIndex(
       //The findIndex() method returns the index of the first element in the array that satisfies the provided testing function. Otherwise, it returns -1, indicating that no element passed the test.
@@ -651,3 +654,15 @@ console.log(dogs[0]);
 dogs.forEach(dog => {
   dog;
 });
+
+//setTimeout()
+// The setTimeout() method calls a function after a number of milliseconds.
+const ingredients = ['olives', ''];
+const pizzaTimer = setTimeout(
+  (ing1, ing2) => console.log(`here is your pizza with ${ing1}, ${ing2}`),
+  3000,
+  ...ingredients
+);
+console.log('waiting');
+
+if (ingredients.includes('spinach')) clearTimeout(pizzaTimer); //Use the clearTimeout() method to prevent the function from starting.
