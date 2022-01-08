@@ -47,7 +47,7 @@ const renderCountry = function (data, className = '') {
   countriesContainer.insertAdjacentHTML('beforeend', html);
   countriesContainer.style.opacity = 1;
 };
-
+/*
 const getCountryAndNeighbour = function (country) {
   const request = new XMLHttpRequest();
   request.open('GET', `https://restcountries.com/v2/name/${country}`);
@@ -76,3 +76,28 @@ const getCountryAndNeighbour = function (country) {
 };
 
 getCountryAndNeighbour('spain');
+
+*/
+
+//✅✅✅promise
+
+// const getCountryData = function (country) {
+//   fetch(`https://restcountries.com/v2/name/${country}`)
+//     .then(function (response) {
+//       return response.json(); //it also returns a promise the we need a another then() method
+//     })
+//     .then(function (data) {
+//       // //then() method for promise which was returned by json();
+//       console.log(data);
+//       renderCountry(data[0]);
+//     });
+// };
+
+//😍same as above code but simplified using arrow function
+const getCountryData = function (country) {
+  fetch(`https://restcountries.com/v2/name/${country}`)
+    .then(response => response.json())
+    .then(data => renderCountry(data[0]));
+};
+
+getCountryData('portugal');
