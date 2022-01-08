@@ -113,3 +113,79 @@ bmw.brake();
 bmw.accelerate();
 
 bmw.brake();
+
+//ES6 Classes
+
+//class expression
+// class PersonCl = class {};
+
+//another way of creating objects
+//class declaration
+class PersonCl {
+  constructor(firstName, birthYear) {
+    this.firstName = firstName;
+    this.birthYear = birthYear;
+  }
+  calcAge() {
+    //all the methods out side the constructor are in prototype
+    console.log(2022 - this.birthYear);
+  }
+}
+const rahul = new PersonCl('Rahul', 1997);
+console.log(rahul);
+rahul.calcAge();
+
+PersonCl.prototype.greet = function () {
+  console.log(`hey this is ${this.firstName}`);
+};
+rahul.greet();
+
+//points to be remembered
+//1. classes are not hoisted
+//2. classes are first-class citizens
+//3. classes are executed in strict mode
+
+//object.create()
+const PersonProto = {
+  calcAge() {
+    console.log(2022 - this.birthYear);
+  },
+};
+
+const steven = Object.create(PersonProto);
+console.log(steven);
+steven.name = 'Steven';
+steven.birthYear = 1998;
+steven.calcAge();
+//////////////////////////////////////
+// Coding Challenge #2
+
+/* 
+1. Re-create challenge 1, but this time using an ES6 class;
+2. Add a getter called 'speedUS' which returns the current speed in mi/h (divide by 1.6);
+3. Add a setter called 'speedUS' which sets the current speed in mi/h (but converts it to km/h before storing the value, by multiplying the input by 1.6);
+4. Create a new car and experiment with the accelerate and brake methods, and with the getter and setter.
+
+DATA CAR 1: 'Ford' going at 120 km/h
+
+GOOD LUCK 😀
+*/
+
+class Car1 {
+  constructor(make, speed) {
+    this.make = make;
+    this.speed = speed;
+  }
+  get speedUS() {
+    this.speed /= 1.6;
+    return this.speed;
+  }
+  set speedUS(spd) {
+    this.speed *= spd;
+  }
+}
+const ford = new Car1('FORD', 120);
+console.log(ford);
+console.log(ford.speedUS); //we should call getter method speedUS but not speedUS()
+ford.spd = 1.6;
+console.log(ford.speed);
