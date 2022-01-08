@@ -4,7 +4,7 @@ const btn = document.querySelector('.btn-country');
 const countriesContainer = document.querySelector('.countries');
 
 ///////////////////////////////////////
-
+//AJAX CALL :: Using XMLHTTPRequest()
 const request = new XMLHttpRequest();
 request.open('GET', 'https://restcountries.com/v2/name/NEPAL');
 request.send();
