@@ -128,10 +128,6 @@ const getCountryData = function (country) {
     });
 };
 
-btn.addEventListener('click', function () {
-  whereAmI(-33.933, 18.474);
-});
-
 ///////////////////////////////////////git
 // Coding Challenge #1
 
@@ -159,19 +155,119 @@ TEST COORDINATES 2: -33.933, 18.474
 GOOD LUCK 😀
 */
 
-const whereAmI = function (lat, lang) {
-  fetch(`https://geocode.xyz/${lat},${lang}?geoit=json`)
-    .then(response => {
-      console.log(response);
-      if (!response.ok)
-        throw new Error(`something went wrong ${response.status} error`);
-      return response.json();
-    })
-    .then(data => {
-      console.log(data);
+// const whereAmI = function (lat, lang) {
+//   fetch(`https://geocode.xyz/${lat},${lang}?geoit=json`)
+//     .then(response => {
+//       console.log(response);
+//       if (!response.ok)
+//         throw new Error(`something went wrong ${response.status} error`);
+//       return response.json();
+//     })
+//     .then(data => {
+//       console.log(data);
 
-      getCountryAndNeighbour(data.country);
-      console.log(`You are in ${data.city}, ${data.country}`);
-    })
-    .catch(err => console.log(err));
+//       getCountryAndNeighbour(data.country);
+//       console.log(`You are in ${data.city}, ${data.country}`);
+//     })
+//     .catch(err => console.log(err));
+// };
+
+//event loop
+// console.log('test start');
+// setTimeout(() => console.log(' 0 sec timer'), 0);
+// Promise.resolve('resolved promise 1').then(res => console.log(res));
+// console.log('test end');
+// Promise.resolve('resolved promise 2').then(res => {
+//   for (let i = 0; i < 1000000; i++) {}
+//   console.log(res);
+// });
+
+//op for above code:
+// test start
+//  test end
+// resolved promise 1
+//  0 sec timer
+
+//promise callback function will execute before the setTimeout callback because >> promise callbacks are went into the micro task queue and setTimeout callbacks are went to the call back queue ..therefore micro task queue has high priority than the callback queue
+//✅✅promise calback functions has high priority
+
+//promisifing
+const lotteryPromise = new Promise(function (resolve, reject) {
+  //here resolve and reject are functions
+  console.log('lottery draw is happening');
+  setTimeout(function () {
+    if (Math.random() >= 0.5) {
+      resolve('You Win');
+    } else {
+      reject(new Error('you lost your money'));
+    }
+  }, 2000);
+});
+
+lotteryPromise.then(res => console.log(res)).catch(err => console.error(err));
+
+//promisifing setTimeout
+const wait = function (seconds) {
+  return new Promise(function (resolve) {
+    setTimeout(resolve, seconds * 1000);
+  });
 };
+
+wait(2)
+  .then(() => {
+    console.log('i waited for 2 sec');
+    return wait(1);
+  })
+  .then(() => console.log('i waited for 1 sec'));
+
+// navigator.geolocation.getCurrentPosition(
+//   position => console.log(position),
+//   err => console.log(err)
+// );
+
+const getPosition = function () {
+  // navigator.geolocation.getCurrentPosition(
+  //   position => console.log(position),
+  //   err => console.log(err)
+  // );
+  return new Promise(function (resolve, reject) {
+    navigator.geolocation.getCurrentPosition(resolve, reject);
+  });
+  n;
+};
+
+getPosition().then(res => console.log(res));
+
+// const whereAmI = function () {
+//   getPosition()
+//     .then(pos => {
+//       const { latitude: lat, longitude: lang } = pos.coords;
+
+//       return fetch(`https://geocode.xyz/${lat},${lang}?geoit=json`);
+//     })
+
+//     .then(response => {
+//       console.log(response);
+//       if (!response.ok)
+//         throw new Error(`something went wrong ${response.status} error`);
+//       return response.json();
+//     })
+//     .then(data => {
+//       console.log(data);
+
+//       getCountryAndNeighbour(data.country);
+//       console.log(`You are in ${data.city}, ${data.country}`);
+//     })
+//     .catch(err => console.log(err));
+// };
+
+// btn.addEventListener('click', whereAmI);
+
+//async await
+const whereAmI = async function (country) {
+  const res = await fetch(`https://restcountries.com/v2/name/${country}`);
+  const data = await res.json();
+  renderCountry(data[0]);
+};
+whereAmI('bharat');
+console.log('this will executed before wherami funtion');
