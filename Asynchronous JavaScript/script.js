@@ -132,7 +132,7 @@ btn.addEventListener('click', function () {
   whereAmI(-33.933, 18.474);
 });
 
-///////////////////////////////////////
+///////////////////////////////////////git
 // Coding Challenge #1
 
 /* 
